@@ -22,94 +22,70 @@ export const commandsDiv = (
 
 function Terminal() {
   const [command, setCommand] = useState("");
-  const [help, setHelp] = useState(false);
-  const [error, setError] = useState("");
-  const [aboutMe, setAboutMe] = useState("");
-  const [ls, setLs] = useState("");
-  const [echo, setEcho] = useState("");
+  const [history, setHistory] = useState([]);
 
   function handleSubmit(e) {
     e.preventDefault();
+    let output;
+
     if (command.startsWith("echo ")) {
-      setEcho(command.slice(5));
+      output = <p>{command.slice(5)}</p>;
     } else {
       switch(command) {
         case "help":
-          setHelp(true);
+          output = commandsDiv;
           break;
         case "cat about.txt":
-          setAboutMe(`Hello! I'm Tyler Mestery, a Computer Science undergraduate at Iowa State University with a strong focus on software engineering, AI systems, and backend development.
-  I enjoy working close to the system level - performance, correctness, automation, and scalability - and I’m especially interested in how modern LLMs and AI tooling 
-  integrate with real production systems.`);
+          output = <pre>{`Hello! I'm Tyler Mestery, a Computer Science undergraduate at Iowa State University with a strong focus on software engineering, AI systems, and backend development.\nI enjoy working close to the system level - performance, correctness, automation, and scalability - and I'm especially interested in how modern LLMs and AI tooling integrate with real production systems.`}</pre>;
           break;
         case "cat contact.txt":
-          setAboutMe(`Email: tmest@iastate.edu
-  Linkedin: linkedin.com/in/tmest
-  Github: github.com/tmestery`);
+          output = <pre>{`Email: tmest@iastate.edu\nLinkedin: linkedin.com/in/tmest\nGithub: github.com/tmestery`}</pre>;
           break;
         case "ls":
-          setLs(`contact.txt  about.txt`);
+          output = <p>contact.txt  about.txt</p>;
           break;
         case "clear":
-          setHelp(false)
-          setError(false)
-          setAboutMe(false)
-          setLs(false)
-          setEcho(false)
-          break;
+          setHistory([]);
+          setCommand("");
+          return;
         case "resume":
-          resumeCommand();
+          window.open("https://drive.google.com/file/d/1pUonqFGMaKIlSa5G3wrMRlfxfr_ncbIi/view?usp=sharing", "_blank");
           break;
         case "github":
-          githubCommand();
+          window.open("https://github.com/tmestery", "_blank");
           break;
         case "linkedin":
-          linkedinCommand();
+          window.open("https://linkedin.com/in/tmest", "_blank");
           break;
         default:
-          setError(`command not found: ${command}`);
+          output = <p>command not found: {command}</p>;
           break;
       }
     }
 
-    // Set it to blank after enter key
-    setCommand("")
-  }
-
-  function handleChange(e) {
-    setCommand(e.target.value);
+    setHistory(prev => [...prev, 
+      <p>guest@online-5173 % {command}</p>,
+      output
+    ]);
+    setCommand("");
   }
 
   return (
     <div>
+      {history.map((item, index) => (
+        <div key={index}>{item}</div>
+      ))}
       <form className="form" onSubmit={handleSubmit}>
         <label>guest@online-5173 %
           <input
             type="text"
             value={command}
-            onChange={handleChange}
+            onChange={e => setCommand(e.target.value)}
           />
         </label>
       </form>
-      {help && commandsDiv}
-      {error && <pre><p>{error}</p></pre>}
-      {ls && <p>{ls}</p>}
-      {aboutMe && <pre><p>{aboutMe}</p></pre>}
-      {echo && <p>{echo}</p>}
     </div>
   );
-}
-
-function linkedinCommand() {
-  window.open("https://linkedin.com/in/tmest", "_blank");
-}
-
-function githubCommand() {
-  window.open("https://github.com/tmestery", "_blank");
-}
-
-function resumeCommand() {
-  window.open("https://drive.google.com/file/d/1pUonqFGMaKIlSa5G3wrMRlfxfr_ncbIi/view?usp=sharing", "_blank");
 }
 
 export default Terminal;

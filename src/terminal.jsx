@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import './App.css'
+import './index.css'
 
 const commands = [
   { name: "cat",      desc: "Display File Contents" },
@@ -24,20 +24,52 @@ function Terminal() {
   const [command, setCommand] = useState("");
   const [help, setHelp] = useState(false);
   const [error, setError] = useState("");
+  const [aboutMe, setAboutMe] = useState("");
+  const [ls, setLs] = useState("");
+  const [echo, setEcho] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    switch(command) {
-      case "help":
-        helpCommand();
-      case "resume":
-        resumeCommand();
-      case "github":
-        githubCommand();
-      case "linkedin":
-        linkedinCommand();
-      default:
-        setError(`command not found: ${command}`);
+    if (command.startsWith("echo ")) {
+      setEcho(command.slice(5));
+    } else {
+      switch(command) {
+        case "help":
+          setHelp(true);
+          break;
+        case "cat about.txt":
+          setAboutMe(`Hello! I'm Tyler Mestery, a Computer Science undergraduate at Iowa State University with a strong focus on software engineering, AI systems, and backend development.
+  I enjoy working close to the system level - performance, correctness, automation, and scalability - and I’m especially interested in how modern LLMs and AI tooling 
+  integrate with real production systems.`);
+          break;
+        case "cat contact.txt":
+          setAboutMe(`Email: tmest@iastate.edu
+  Linkedin: linkedin.com/in/tmest
+  Github: github.com/tmestery`);
+          break;
+        case "ls":
+          setLs(`contact.txt  about.txt`);
+          break;
+        case "clear":
+          setHelp(false)
+          setError(false)
+          setAboutMe(false)
+          setLs(false)
+          setEcho(false)
+          break;
+        case "resume":
+          resumeCommand();
+          break;
+        case "github":
+          githubCommand();
+          break;
+        case "linkedin":
+          linkedinCommand();
+          break;
+        default:
+          setError(`command not found: ${command}`);
+          break;
+      }
     }
 
     // Set it to blank after enter key
@@ -50,7 +82,7 @@ function Terminal() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <label>guest@online-5173 %
           <input
             type="text"
@@ -60,7 +92,10 @@ function Terminal() {
         </label>
       </form>
       {help && commandsDiv}
-      {error && <p>{error}</p>}
+      {error && <pre><p>{error}</p></pre>}
+      {ls && <p>{ls}</p>}
+      {aboutMe && <pre><p>{aboutMe}</p></pre>}
+      {echo && <p>{echo}</p>}
     </div>
   );
 }

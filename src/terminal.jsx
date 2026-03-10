@@ -64,28 +64,39 @@ function Terminal() {
     }
 
     setHistory(prev => [...prev, 
-      <p>guest@online-5173 % {command}</p>,
+      <p style={{display: 'flex', gap: '0.5rem', margin: 0, whiteSpace: 'nowrap' }}>guest@online-5173 % {command}</p>,
       output
     ]);
     setCommand("");
   }
 
   return (
-    <div>
-      {history.map((item, index) => (
-        <div key={index}>{item}</div>
-      ))}
-      <form className="form" onSubmit={handleSubmit}>
-        <label>guest@online-5173 %
-          <input
-            type="text"
-            value={command}
-            onChange={e => setCommand(e.target.value)}
-          />
-        </label>
-      </form>
-    </div>
-  );
+  <div style={{ backgroundColor: 'black', minHeight: '100vh', padding: '1rem' }}>
+    {history.map((item, index) => (
+      <div key={index}>{item}</div>
+    ))}
+    <form className="form" onSubmit={handleSubmit}>
+      <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', whiteSpace: 'nowrap' }}>
+        <span>guest@online-5173 %</span>
+        <input
+          type="text"
+          value={command}
+          onChange={e => setCommand(e.target.value)}
+          style={{
+            backgroundColor: 'black',
+            color: '#00FF00',
+            border: 'none',
+            outline: 'none',
+            fontFamily: 'JetBrains Mono, Courier New, monospace',
+            fontSize: 'inherit',
+            caretColor: '#00FF00',
+            width: '60vw',
+          }}
+        />
+      </label>
+    </form>
+  </div>
+);
 }
 
 export default Terminal;

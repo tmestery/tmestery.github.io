@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono&display=swap');
+
 :root {
   font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Courier New', monospace;
   line-height: 1.5;
@@ -14,11 +15,25 @@
   /* Terminal */
   letter-spacing: 0.02em;
   text-shadow: 0 0 8px rgba(20, 232, 45, 0.4);
+  font-size: clamp(0.8125rem, 1.5vw, 1.125rem);
+  --spacing-sm: clamp(0.5rem, 1vw, 0.75rem);
+  --spacing-md: clamp(1rem, 2vw, 1.5rem);
+  --spacing-lg: clamp(1.5rem, 4vw, 3rem);
 }
 
 .form {
   background-color: black;
   color: #00FF00;
   font-weight: 400;
-  border-color: black;
+  border: none;
+  padding: 0;
+  width: 100%;
+  font-size: inherit;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .form {
+    padding: 0;
+  }
 }

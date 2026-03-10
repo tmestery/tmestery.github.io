@@ -22,7 +22,9 @@ export const commandsDiv = (
 
 function Terminal() {
   const [command, setCommand] = useState("");
-  const [history, setHistory] = useState([]);
+  const [history, setHistory] = useState([
+  <pre style={{ margin: 0 }}>{`Welcome to Tyler Mestery's terminal. Type 'help' to get started.`}</pre>
+]);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -71,7 +73,7 @@ function Terminal() {
   }
 
   return (
-  <div style={{ backgroundColor: 'black', minHeight: '100vh', padding: '1rem' }}>
+  <div style={{backgroundColor: 'transparent', minHeight: '100vh', padding: '1rem', position: 'relative', zIndex: 1 }}>
     {history.map((item, index) => (
       <div key={index}>{item}</div>
     ))}
@@ -83,7 +85,7 @@ function Terminal() {
           value={command}
           onChange={e => setCommand(e.target.value)}
           style={{
-            backgroundColor: 'black',
+            backgroundColor: 'transparent',
             color: '#00FF00',
             border: 'none',
             outline: 'none',

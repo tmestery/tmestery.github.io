@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import './index.css'
+import './matrixBackground.jsx'
 
 const commands = [
-  { name: "cat",      desc: "Display File Contents" },
-  { name: "ls",       desc: "List Directory Contents" },
-  { name: "echo",     desc: "Display Text" },
-  { name: "clear",    desc: "Clear the Terminal Screen" },
-  { name: "resume",   desc: "Open a New Tab With Resume" },
-  { name: "github",   desc: "Open my GitHub in a New Tab" },
-  { name: "linkedin", desc: "Open my LinkedIn in a New Tab" },
-  { name: "help",     desc: "Show this help message" },
+  { name: "cat",             desc: "Display File Contents" },
+  { name: "ls",              desc: "List Directory Contents" },
+  { name: "echo",            desc: "Display Text" },
+  { name: "clear",           desc: "Clear the Terminal Screen" },
+  { name: "resume",          desc: "Open a New Tab With Resume" },
+  { name: "github",          desc: "Open my GitHub in a New Tab" },
+  { name: "linkedin",        desc: "Open my LinkedIn in a New Tab" },
+  { name: "color",           desc: "Change text color (hex)"},
+  { name: "help",            desc: "Show this help message" },
 ];
 
 export const commandsDiv = (
@@ -22,6 +24,7 @@ export const commandsDiv = (
 
 function Terminal() {
   const [command, setCommand] = useState("");
+  const [textColor, setTextColor] = useState("#00FF00");
   const [history, setHistory] = useState([
   <pre style={{ margin: 0 }}>{`Welcome to Tyler Mestery's terminal. Type 'help' to get started.`}</pre>
 ]);
@@ -32,6 +35,14 @@ function Terminal() {
 
     if (command.startsWith("echo ")) {
       output = <p>{command.slice(5)}</p>;
+    } else if (command.startsWith("color ")) {
+      var re = /[0-9A-Fa-f]{6}/g;
+      const color = command.slice(6).trim();
+      if (re.test(color)) {
+        setTextColor(`${color}`)
+      } else {
+        output = <pre>{`hex invalid: ${color}`}</pre>
+      }
     } else {
       switch(command) {
         case "help":
@@ -43,8 +54,15 @@ function Terminal() {
         case "cat contact.txt":
           output = <pre>{`Email: tmest@iastate.edu\nLinkedin: linkedin.com/in/tmest\nGithub: github.com/tmestery`}</pre>;
           break;
+        case "cat bgColors.txt":
+          output = <pre>{`Here are some example hex colors you can change the background to:
+#00FF00 (Green),
+#ff0000 (Red),
+#1c03ff(Blue),
+#ffffff (White)`}</pre>;
+          break;
         case "ls":
-          output = <p>contact.txt  about.txt</p>;
+          output = <p>contact.txt  about.txt  bgColors.txt</p>;
           break;
         case "clear":
           setHistory([]);
@@ -86,7 +104,7 @@ function Terminal() {
           onChange={e => setCommand(e.target.value)}
           style={{
             backgroundColor: 'transparent',
-            color: '#00FF00',
+            color: textColor,
             border: 'none',
             outline: 'none',
             fontFamily: 'JetBrains Mono, Courier New, monospace',
